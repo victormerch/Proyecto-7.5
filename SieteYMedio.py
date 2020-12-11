@@ -109,7 +109,8 @@ while True:
 
         for i in range(1,len(turno)):
             
-            dict_players[turno[i][0]] = {"cartas":0,"prioridad":i,"suma_puntos_cartas":0,"ultimo_repartido":0,"estado_mano":"jugando","puntos":20}
+            dict_players[turno[i][0]] = {"cartas":0,"prioridad":i,"suma_puntos_cartas":0,"ultimo_repartido":0,
+                                         "estado_mano":"jugando","puntos":20,"puntos_apostados":0}
         
         #print(n_players)
         
@@ -117,51 +118,66 @@ while True:
     
     #== Bucle turnos ==
 
-    while not Orden_Jugadores:
+    while not(Orden_Jugadores, salir):
         cartas_eliminadas = []
         jugadores_turno = []
+        cont_jugadores = 0
+        cont_eliminados = 0
 
         for key in turno:# Filtrador para ver quien juega
             if dict_players[key]["estado_mano"] == "jugando":
                 dict_players[key]["cartas"] = []
                 jugadores_turno.append(key)
+                cont_jugadores += 1
+
+
+
 
         puntos_apuestas = 0
-        cont_plantados = 0
 
-        #while no esten todos plantados 
 
-        for key in turno:
+        while not cont_eliminados == cont_jugadores:#Si hay alguno que este jugando se iniciara
 
-            carta = random.choice(mazo)
-            cartas_eliminadas.append(carta)
-            mazo.remove(carta)
+            for key in jugadores_turno:
 
-            dict_players[key]["cartas"].append(carta)
+                carta = random.choice(mazo)
+                cartas_eliminadas.append(carta)
+                mazo.remove(carta)
 
-            print(turno[i][0].upper(),
-                  "\n-Cartas ->", dict_players[key]["cartas"],
-                  "\n-Puntos ->", dict_players[key]["puntos"])
-            print("1) Apostar\n"
-                  "2) Retirarte")
-            option_turno = input(">")
+                dict_players[key]["cartas"].append(carta)
+                dict_players[key]["suma"]["suma_puntos_cartas"] += carta[2]
 
-            while True:
-                if option_turno == "1":
-                    cantidad_apuesta = int(input("-Introduce la cantidad de puntos que quieres apostar->"))
-                    puntos_apuestas += cantidad_apuesta
+                print(key.upper(),
+                      "\n-Cartas ->", dict_players[key]["cartas"],
+                      "\n-Puntos cartas ->", dict_players[key]["suma"]["suma_puntos_cartas"],
+                      "\n-Puntos ->", dict_players[key]["puntos"])
+                print("1) Apostar\n"
+                      "2) Retirarte")
+                option_turno = input(">")
 
-                    dict_players[key][
-                        "puntos"] -= cantidad_apuesta  # Comprobar si es posible apostar si tiene o no los suficientes puntos
+                while True:
+                    if option_turno == "1":
+                        while True:  # Comprobar si es posible apostar si tiene o no los suficientes puntos
+                            cantidad_apuesta = int(input("-Introduce la cantidad de puntos que quieres apostar->"))
 
-                    break
-                elif option_turno == "2":
-                    dict_players[key]["estado_mano"] = "plantado"
-                    cont_plantados += 1
-                    break
+                            if cantidad_apuesta > dict_players[key]["puntos"] or cantidad_apuesta <= 0:
+                                print("== Cantidad incorrecta ==")
+                            else:
+                                puntos_apuestas += cantidad_apuesta
+                                dict_players[key]["puntos"] -= cantidad_apuesta
+                                dict_players[key]["puntos_apostados"] += cantidad_apuesta
+                                break
+                        break
+                    elif option_turno == "2":
+                        dict_players[key]["estado_mano"] = "plantado"
+                        cont_eliminados += 1
+                        break
 
-                else:
-                    print("\n== OPCION NO DISPONIBLE ==\n")
+                    else:
+                        print("\n== OPCION NO DISPONIBLE ==\n")
+
+        for key in jugadores_turno:
+
             
         
 
@@ -169,7 +185,7 @@ while True:
 
 
         #===============================================================    
-        #LARIOS SI LES ESTO -> AQUI LLEGARIA SI YA ESTAN TODOS PLANTADOS, 
+        #LARIOS SI LES ESTO -> AQUI LLEGARIA SI YA ESTAN TODOS PLANTADOS,
         #ENTONCES SE TENDRIA QUE PONER LAS CARTAS ELIMINADAS EN EL MAZO, 
         #VER QUIEN ES EL GANADOR DEL TURNO Y REPARTIR LOS TURNOS
         #===============================================================
