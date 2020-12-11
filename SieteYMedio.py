@@ -138,33 +138,36 @@ while True:
             mazo.remove(carta)
 
             dict_players[key]["cartas"].append(carta)
+
+            print(turno[i][0].upper(),
+                  "\n-Cartas ->", dict_players[key]["cartas"],
+                  "\n-Puntos ->", dict_players[key]["puntos"])
+            print("1) Apostar\n"
+                  "2) Retirarte")
+            option_turno = input(">")
+
+            while True:
+                if option_turno == "1":
+                    cantidad_apuesta = int(input("-Introduce la cantidad de puntos que quieres apostar->"))
+                    puntos_apuestas += cantidad_apuesta
+
+                    dict_players[key][
+                        "puntos"] -= cantidad_apuesta  # Comprobar si es posible apostar si tiene o no los suficientes puntos
+
+                    break
+                elif option_turno == "2":
+                    dict_players[key]["estado_mano"] = "plantado"
+                    cont_plantados += 1
+                    break
+
+                else:
+                    print("\n== OPCION NO DISPONIBLE ==\n")
             
         
-            for i in range(len(turno)):
+
              
 
-                print(turno[i][0].upper(),
-                  "\n-Cartas ->",dict_players[turno[i][0]]["cartas"],
-                  "\n-Puntos ->",dict_players[turno[i][0]]["puntos"])
-                print("1) Apostar\n"
-                      "2) Retirarte")
-                option_turno = input(">")
 
-                while True:
-                    if option_turno == "1":
-                        cantidad_apuesta = int(input("-Introduce la cantidad de puntos que quieres apostar->"))
-                        puntos_apuestas += cantidad_apuesta 
-                    
-                        dict_players[turno[i][0]]["puntos"] -= cantidad_apuesta  #Comprobar si es posible apostar si tiene o no los suficientes puntos
-                    
-                        break
-                    elif option_turno == "2":
-                        dict_players[turno[i][0]]["estado_mano"] = "plantado"
-                        cont_plantados += 1
-                        break
-
-                    else:
-                        print("\n== OPCION NO DISPONIBLE ==\n")
         #===============================================================    
         #LARIOS SI LES ESTO -> AQUI LLEGARIA SI YA ESTAN TODOS PLANTADOS, 
         #ENTONCES SE TENDRIA QUE PONER LAS CARTAS ELIMINADAS EN EL MAZO, 
