@@ -220,9 +220,9 @@ while True:
 
 
         #===============================================================    
-        #LARIOS SI LES ESTO -> AQUI LLEGARIA SI YA ESTAN TODOS PLANTADOS,
-        #ENTONCES SE TENDRIA QUE PONER LAS CARTAS ELIMINADAS EN EL MAZO, 
-        #VER QUIEN ES EL GANADOR DEL TURNO Y REPARTIR LOS TURNOS
+        #-Poder hacer lo de los empates con listas
+        #-Poder reiniciar los turnos
+        #-Ver si solo queda uno acabar los turnos, entrar en conclusion de partidas para ver quien ha ganado viendo el que tiene mayor puntuacion
         #===============================================================
                 
 
