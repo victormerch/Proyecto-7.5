@@ -177,7 +177,7 @@ while True:
                         print("\n== OPCION NO DISPONIBLE ==\n")
 
         for key in jugadores_turno:
-
+            print("jajajaaj")
             
         
 
