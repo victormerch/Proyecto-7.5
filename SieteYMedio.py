@@ -110,22 +110,25 @@ while True:
         for i in range(1,len(turno)):
             
             dict_players[turno[i][0]] = {"cartas":0,"prioridad":i,"suma_puntos_cartas":0,"ultimo_repartido":0,
-                                         "estado_mano":"jugando","puntos":20,"puntos_apostados":0}
+                                         "estado_mano":"jugando","puntos":20}
         
         #print(n_players)
         
 
     
     #== Bucle turnos ==
+    contador_rondas = 0
 
     while not Orden_Jugadores:
-        contador_rondas = 1
+        cont_plantados = 0
+        contador_rondas += 1
         cartas_eliminadas = []
         jugadores_turno = []
         cont_jugadores = 0
-        cont_eliminados = 0
+
 
         print("\n=== RONDA",contador_rondas,"===\n")
+
 
         for i in range(len(turno)):# Filtrador para ver quien juega
             if dict_players[turno[i][0]]["estado_mano"] == "jugando":
@@ -135,47 +138,57 @@ while True:
 
 
 
-        while not cont_eliminados == cont_jugadores:#Si hay alguno que este jugando se iniciara
+
+        while not cont_plantados == cont_jugadores :#Si hay alguno que este jugando se iniciara
 
             for key in jugadores_turno:
 
                 if dict_players[key]["estado_mano"] == "jugando":
-                    carta = random.choice(mazo)
-                    cartas_eliminadas.append(carta)
-                    mazo.remove(carta)
+                    if dict_players[key]["puntos"] <= 0:
+                        print("--El jugador",key,"se ha quedado sin puntos para apostar asique quedara plantado--")
+                        dict_players[key]["estado_mano"] = "plantado"
+                        cont_jugadores = 0
+                        cont_plantados = cont_jugadores
+                        break
 
-                    dict_players[key]["cartas"].append(carta)
-                    dict_players[key]["suma_puntos_cartas"] += carta[2]
 
-                    while True:
-                        print(key.upper(),
-                              "\n-Cartas ->", dict_players[key]["cartas"],
-                              "\n-Puntos cartas ->", dict_players[key]["suma_puntos_cartas"],
-                              "\n-Puntos de",key," ->", dict_players[key]["puntos"])
-                        print("1) Apostar\n"
-                              "2) Retirarte")
-                        option_turno = input(">")
+                    else:
+                        carta = random.choice(mazo)
+                        cartas_eliminadas.append(carta)
+                        mazo.remove(carta)
 
-                        if option_turno == "1":
-                            while True:  # Comprobar si es posible apostar si tiene o no los suficientes puntos
-                                cantidad_apuesta = int(input("-Introduce la cantidad de puntos que quieres apostar->"))
+                        dict_players[key]["cartas"].append(carta)
+                        dict_players[key]["suma_puntos_cartas"] += carta[2]
 
-                                if cantidad_apuesta > dict_players[key]["puntos"] or cantidad_apuesta <= 0:
-                                    print("== Cantidad incorrecta ==")
-                                else:
-                                    dict_players[key]["puntos"] -= cantidad_apuesta
+                        while True:
+                            print(key.upper(),
+                                  "\n-Cartas ->", dict_players[key]["cartas"],
+                                  "\n-Puntos cartas ->", dict_players[key]["suma_puntos_cartas"],
+                                  "\n-Puntos de", key, " ->", dict_players[key]["puntos"])
+                            print("1) Apostar\n"
+                                  "2) Retirarte")
+                            option_turno = input(">")
 
-                                    dict_players[key]["puntos_apostados"] += cantidad_apuesta
-                                    break
-                            break
-                        elif option_turno == "2":
-                            print("\n==El jugador", key.upper(), "se ha plantado==\n")
-                            dict_players[key]["estado_mano"] = "plantado"
-                            cont_eliminados += 1
-                            break
+                            if option_turno == "1":
+                                while True:  # Comprobar si es posible apostar si tiene o no los suficientes puntos
+                                    cantidad_apuesta = int(input("-Introduce la cantidad de puntos que quieres apostar->"))
 
-                        else:
-                            print("\n== OPCION NO DISPONIBLE ==\n")
+                                    if cantidad_apuesta > dict_players[key]["puntos"] or cantidad_apuesta <= 0:
+                                        print("== Cantidad incorrecta ==")
+                                    else:
+                                        dict_players[key]["puntos"] -= cantidad_apuesta
+                                        dict_players[key]["suma_puntos_cartas"] += cantidad_apuesta
+                                        break
+                                break
+                            elif option_turno == "2":
+                                print("\n==El jugador", key.upper(), "se ha plantado==\n")
+                                cont_plantados += 1
+                                dict_players[key]["estado_mano"] = "plantado"
+
+                                break
+
+                            else:
+                                print("\n== OPCION NO DISPONIBLE ==\n")
 
         #== Reponer las cartas al mazo ==
         for cartas in cartas_eliminadas:
@@ -186,31 +199,64 @@ while True:
         puntos_ganador = 0
         ganador_puntos = 0
         ganador = 0
-        for key in jugadores_turno:
 
-            if dict_players[key]["suma_puntos_cartas"] > 7.5:
-                puntos_banca +=  dict_players[key]["suma_puntos_cartas"]
-                dict_players[key]["estado_mano"] = "eliminado"
-                print("\n==El jugador",key,"queda eliminado de esta partida y sus puntos van para la banca actual==\n")
+        if cont_jugadores == 0 or cont_jugadores == 1 :
+            print("==Partida finalizada==")
+
+            #====Ver quien es el jugador segun las puntuaciones de cada uno===
+            print("$$ El ganador es tupu $$")
+
+            #====
+            print("+Quieres jugar otra partida??\n"
+                    "1)Si\n"
+                    "Cualquier tecla)No")
+            option_final = input(">")
+            if option_final == "1":
+                Jugadores = True
             else:
-                if dict_players[key]["suma_puntos_cartas"] > ganador_puntos:
-                    ganador_puntos = dict_players[key]["suma_puntos_cartas"]
-                    ganador = key
+                salir = True
+            Orden_Jugadores = True
+
+        else:
+
+            for key in jugadores_turno:
+
+                if dict_players[key]["suma_puntos_cartas"] > 7.5:
+                    puntos_banca += dict_players[key]["suma_puntos_cartas"] + dict_players[key]["puntos"]
+                    dict_players[turno[0][0]]["puntos"] += puntos_banca
+                    dict_players[key]["estado_mano"] = "eliminado"
+                    print("\n==El jugador", key,
+                          "queda eliminado de esta partida y sus puntos van para la banca actual==\n")
                 else:
-                    puntos_ganador = dict_players[key]["suma_puntos_cartas"]
+                    if dict_players[key]["suma_puntos_cartas"] > ganador_puntos:
+                        ganador_puntos = dict_players[key]["suma_puntos_cartas"]
+                        ganador = key
+                    else:
+                        puntos_ganador = dict_players[key]["suma_puntos_cartas"]
+                    dict_players[key]["estado_mano"] = "jugando"
 
-        for key in jugadores_turno:
 
-            if key == ganador:
-                print("== El ganador de esta ronda es:",key.upper(),"==\n")
-                dict_players[turno[0][0]]["prioridad"] = dict_players[key]["prioridad"]
-                dict_players[key]["prioridad"] = 0
-                dict_players[key]["puntos"] = puntos_ganador
+            for key in jugadores_turno:
 
-            dict_players[key]["cartas"] = 0
-            dict_players[key]["puntos_apostados"] = 0
+                if key == ganador:
+                    print("== El ganador de esta ronda es:", key.upper(), "==\n")
+                    # Cambio prioridad de banca
+                    for i in range(len(turno)):
+                        if turno[i][0] == ganador:
+                            turno[i][0] = turno[0][0]
 
-        Orden_Jugadores = False
+                    turno[0][0] = key
+                    dict_players[turno[0][0]]["prioridad"] = dict_players[key]["prioridad"]
+                    dict_players[key]["prioridad"] = 0
+                    dict_players[key]["puntos"] += puntos_ganador
+
+                dict_players[key]["cartas"] = 0
+                dict_players[key]["puntos_apostados"] = 0
+
+
+
+
+
 
 
             
@@ -221,7 +267,6 @@ while True:
 
         #===============================================================    
         #-Poder hacer lo de los empates con listas
-        #-Poder reiniciar los turnos
         #-Ver si solo queda uno acabar los turnos, entrar en conclusion de partidas para ver quien ha ganado viendo el que tiene mayor puntuacion
         #===============================================================
                 
