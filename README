@@ -1,1 +1,13 @@
-Prueba
+HTML 
+Crear un html y un css
+M02: Fromato web siguiendo:
+La página HTML no puede contener CCS incrustado 
+Encabezado, donde pongamo el titulo y tal
+Indice en fomra de anclas, que seran links a los diferentes informes.
+Cada informe debe tener: Titulo, marco con bordes redondeados, tabla con datos, titulos tabla diferente formato a los datos qeu pongamos y un peqeño texto iexplicativo de la info.
+Todo centrado menos el titulo del informe
+Cada informe presentado con un marco creado con divs
+informes con color de fondo(la pàgina en si no, solo el informe)
+Posicionamiento de los elementos se tiene que hacer con FLEXBOX.
+
+Todo lo lo demás esta en los xml que nos han pasasdo los profes.
