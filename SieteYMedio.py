@@ -17,7 +17,6 @@ mazo = [(1, 1, 1), (1, 2, 1), (1, 3, 1), (1, 4, 1),
         (5, 1, 5), (5, 2, 5), (5, 3, 5), (5, 4, 5),
         (6, 1, 6), (6, 2, 6), (6, 3, 6), (6, 4, 6),
         (7, 1, 7), (7, 2, 7), (7, 3, 7), (7, 4, 7),
-
         (10, 1, 0.5), (10, 2, 0.5), (10, 3, 0.5), (10, 4, 0.5),
         (11, 1, 0.5), (11, 2, 0.5), (11, 3, 0.5), (11, 4, 0.5),
         (12, 1, 0.5), (12, 2, 0.5), (12, 3, 0.5), (12, 4, 0.5)]
@@ -124,7 +123,7 @@ while True:
         for i in range(1,len(turno)):
             
             dict_players[turno[i][0]] = {"cartas":0,"prioridad":i,"suma_puntos_cartas":0,"ultimo_repartido":0,
-                                         "estado_mano":"jugando","puntos":20}
+                                         "estado_mano":"jugando","puntos":20,"puntos_apostados":0}
         
         #print(n_players)
         
@@ -195,7 +194,7 @@ while True:
                                             print("== Cantidad incorrecta ==")
                                         else:
                                             dict_players[key]["puntos"] -= cantidad_apuesta
-                                            dict_players[key]["suma_puntos_cartas"] += cantidad_apuesta
+                                            dict_players[key]["puntos_apostados"] += cantidad_apuesta
                                             break
                                     break
             else:#== Siguientes turnos turno ==
@@ -246,6 +245,8 @@ while True:
         puntos_banca = 0
         puntos_ganador = 0
         ganador_puntos = 0
+        ganadores = []
+        nose_pasaron = []
         ganador = 0
 
         if cont_jugadores == 0 or cont_jugadores == 1 :
@@ -266,10 +267,10 @@ while True:
             Orden_Jugadores = True
 
         else:
-
+            #Ver el numero de puntos mas alto
             for key in jugadores_turno:
 
-                if dict_players[key]["suma_puntos_cartas"] == 7.5:
+                if dict_players[key]["suma_puntos_cartas"] > 7.5:
 
                     puntos_banca += dict_players[key]["suma_puntos_cartas"] + dict_players[key]["puntos"]
                     dict_players[turno[0][0]]["puntos"] += puntos_banca
@@ -278,33 +279,50 @@ while True:
                           "queda eliminado de esta partida y sus puntos van para la banca actual==\n")
                 else:
                     if dict_players[key]["suma_puntos_cartas"] > ganador_puntos:
-                        ganador_puntos = dict_players[key]["suma_puntos_cartas"]
+                        ganador_puntos = dict_players[key]["puntos_apostados"]
                         ganador = key
+                        ganadores.append(key)
                     else:
-                        puntos_ganador = dict_players[key]["suma_puntos_cartas"]
+                        puntos_ganador = dict_players[key]["puntos_apostados"]
                     dict_players[key]["estado_mano"] = "jugando"
+                    nose_pasaron.append(key)
+            #Comprobar empates
+            for key in nose_pasaron:
+                if dict_players[key]["suma_puntos_cartas"] == ganador_puntos:
+                    ganadores.append(key)
+            if len(ganadores) == 1:
+                print("==El g")
+                print("== El ganador de esta ronda es:", key.upper(), "==\n")
+                if dict_players[key]["suma_puntos_cartas"] == 7.5:
+                    # Cambio prioridad de banca
+                    print("=+ El jugador", key, "pasa a ser la banca porque a llegado a 7.5 +=")
+                    for i in range(len(turno)):
+                        if turno[i][0] == ganador:
+                            turno[i][0] = turno[0][0]
+
+                    turno[0][0] = key
+                    dict_players[turno[0][0]]["prioridad"] = dict_players[key]["prioridad"]
+                    dict_players[key]["prioridad"] = 0
+
+                else:
+                    dict_players[key]["puntos"] += puntos_ganador
+            elif len(ganadores) > 1:
+                boolean = False
+                for key in ganadores:
+                    if dict_players[key]["prioridad"] == 0:
+                        print("== Habia un empate entre",ganadores,"pero gana",key,"porque es la banca ==")
+                        #Dar puntos
+                        boolean = True
+                        break
+                if boolean == False:
+                    print("== Ha habido un empate entre estos jugadores",ganadores,"==")
+
+            dict_players[key]["cartas"] = 0
+            dict_players[key]["suma_puntos_cartas"] = 0
 
 
-            for key in jugadores_turno:
 
-                if key == ganador or dict_players[key]["suma_puntos_cartas"] == 7.5:
-                    print("== El ganador de esta ronda es:", key.upper(), "==\n")
-                    if dict_players[key]["suma_puntos_cartas"] == 7.5:
-                        # Cambio prioridad de banca
-                        print("=+ El jugador",key,"pasa a ser la banca porque a llegado a 7.5 +=")
-                        for i in range(len(turno)):
-                            if turno[i][0] == ganador:
-                                turno[i][0] = turno[0][0]
 
-                        turno[0][0] = key
-                        dict_players[turno[0][0]]["prioridad"] = dict_players[key]["prioridad"]
-                        dict_players[key]["prioridad"] = 0
-
-                    else:
-                        dict_players[key]["puntos"] += puntos_ganador
-
-                dict_players[key]["cartas"] = 0
-                dict_players[key]["puntos_apostados"] = 0
 
 
 
@@ -315,9 +333,9 @@ while True:
 
 
         #===============================================================    
-        #-Poder hacer lo de los empates con listas
+        #-Solucionar problema de puntos apustados y suma_puntos_cartas
         #-Si la banca se pasa paga a todos los jugadores que se han plantado
-        #-Si te pasas de puntos quedas eliminado
+        #
         #===============================================================
                 
 
