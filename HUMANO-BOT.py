@@ -9,6 +9,7 @@ Menu = True
 Ganador = True
 Volver_a_jugar = False
 Dict_Jugadores = {}
+Repartir = True
 mazo = [(1, 1, 1), (1, 2, 1), (1, 3, 1), (1, 4, 1),
         (2, 1, 2), (2, 2, 2), (2, 3, 2), (2, 4, 2),
         (3, 1, 3), (3, 2, 3), (3, 3, 3), (3, 4, 3),
@@ -254,106 +255,194 @@ while Juego:
             input()
 
             #Repartimos las cantidad de cartas que desee cada jugador#
-            for p in range(len(turno)):
-                if Dict_Jugadores[turno[p][0]]['Estado_Partida'] == True : #comprobamos los jugadores que estan activos en la partida
-                    print('--JUEGA: ', turno[p][0], '--')
-                    if Dict_Jugadores[turno[p][0]]['Banca'] == True: #comprobamos si es la banca
-                        max_suma_puntos = 0
-                        for llave in players:
-                            if Dict_Jugadores[llave]['Estado_Partida'] == True and Dict_Jugadores[llave]['Estado_ronda'] == True:
-                                if Dict_Jugadores[llave]['Suma_puntos_cartas'] > max_suma_puntos:
-                                    max_suma_puntos = Dict_Jugadores[llave]['Suma_puntos_cartas']#comprobamos la maxima suma de cartas (7.5) de TODOS los juagdores
-                        print('La banca debe igualar o superar la cantidad de : ', max_suma_puntos, ' puntos')
-                        while max_suma_puntos != 0 and Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] < max_suma_puntos and  Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] != 7.5:
-                            nueva_carta = random.choice(mazo)
-                            while nueva_carta[0] == 8 or nueva_carta[0] == 9:
-                                nueva_carta = random.choice(mazo)
-                            c_repartidas.append(nueva_carta)
-                            mazo.remove(nueva_carta)
-                            print('CARTA ROBADA: ', nueva_carta, ' por BANCA.')
-                            Dict_Jugadores[turno[p][0]]['Cartas'].append(nueva_carta)
-                            Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas']  += nueva_carta[2]
-                        print('La banca ha conseguido acumular: ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'])
-                        if Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] > 7.5:
-                            Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
-                            print('Se ha pasado!')
 
-                    elif Dict_Jugadores[turno[p][0]]['Tipo_jugador'] == 'Humano': #repartimos las cartas a los humanos
-                        print(turno[p][0], ' tiene ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'], 'puntos.')
-                        robar = str(input('Quieres otra carta?: SI = 1 / NO = Cualquier otra tecla > '))
-                        print()
-                        while robar == '1' and Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] < 7.5:
-                            nueva_carta = random.choice(mazo)
-                            while nueva_carta[0] == 8 or nueva_carta[0] == 9:
-                                nueva_carta = random.choice(mazo)
-                            c_repartidas.append(nueva_carta)
-                            mazo.remove(nueva_carta)
-                            Dict_Jugadores[turno[p][0]]['Cartas'].append(nueva_carta)
-                            print('CARTA ROBADA: ', nueva_carta, ' por ', turno[p][0])
-                            print('CARTAS DE ', turno[p][0], ': ', Dict_Jugadores[turno[p][0]]['Cartas'])
-                            Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] = Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] + nueva_carta[2]
-                            print(turno[p][0], ' obtiene +', nueva_carta[2], ' puntos.')
-                            print(turno[p][0], ' tiene ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'], 'puntos.')
-                            robar = str(input('Quieres otra carta?: SI = 1 / NO = Cualquier otra tecla > '))
+            while Repartir:
+                Repartir = False
+                #COMPROBAMOS SI ESTA ACTIVO EN LA PARTIDA Y EN LA RONDA
+                j_activos = 0
+                for key in Dict_Jugadores:
+                    if Dict_Jugadores[key]['Estado_Partida'] == True and Dict_Jugadores[key]['Estado_ronda'] == True:
+                        j_activos += 1
 
-                            if Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] > 7.5: #jugador elminado de la ronda
-                                print('!TE HAS PASADO¡ Fin de tu turno')
-                                Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
+                j_eliminados = 0
+                j_pasar =  0
+                while j_activos > (j_eliminados + j_pasar):
+                    for p in range(len(turno)):
+                        if Dict_Jugadores[turno[p][0]]['Estado_Partida'] == True and Dict_Jugadores[turno[p][0]]['Estado_ronda'] == True:
+                            input()
+                            print('--TURNO DE ', turno[p][0])
+                            #SI ES LA BANCA#
 
-                        if robar == '0': #jugador se planta con -7.5 o =7.5, participa en la ronda
-                            print(turno[p][0], ' se ha plantado')
-                        print()
-                    elif Dict_Jugadores[turno[p][0]]['Tipo_jugador'] == 'Bot': #se le reparten las cartas al bot
-                        c_posibles = 0
-                        robar_b = True
-                        while robar_b == True and Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] < 7.5:
-                                print('CARTAS DE ', turno[p][0], ': ', Dict_Jugadores[turno[p][0]]['Cartas'])
-                                print('PUNTOS DE LAS CARTAS: ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'])
-                                print()
-                                p_restantes = 7.5 - Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas']
+                            if Dict_Jugadores[turno[p][0]]['Banca'] == True:  # comprobamos si es la banca
+                                print('TOTAL JUGADORES :', j_activos, ' JUGADORES HAN PASADO : ', j_pasar, ' JUGADORES ELMINADOS : ', j_eliminados)
+                                if j_pasar > 0 and j_activos == ((j_eliminados + j_pasar) + 1):
+                                    max_suma_puntos = 0  #MAXIMA PUNTUACION OBTENIDO ENTRE TODOS LOS JUGADORES ACTIVOS
+                                    for llave in players:
+                                        if Dict_Jugadores[llave]['Estado_Partida'] == True and Dict_Jugadores[llave]['Suma_puntos_cartas'] <= 7.5:
+                                            if Dict_Jugadores[llave]['Suma_puntos_cartas'] > max_suma_puntos:
+                                                max_suma_puntos = Dict_Jugadores[llave]['Suma_puntos_cartas']  # comprobamos la maxima suma de cartas (7.5) de TODOS los juagdores
+                                    print('VALOR A SUPERAR POR LA BANCA : ', max_suma_puntos, ' puntos')
+                                    while max_suma_puntos != 0 and Dict_Jugadores[turno[p][0]][
+                                        'Suma_puntos_cartas'] < max_suma_puntos and Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] != 7.5:
+                                        input()
+                                        nueva_carta = random.choice(mazo)
+                                        while nueva_carta[0] == 8 or nueva_carta[0] == 9:
+                                            nueva_carta = random.choice(mazo)
+                                        c_repartidas.append(nueva_carta)
+                                        Dict_Jugadores[turno[p][0]]['Cartas'].append(nueva_carta)
+                                        Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] += nueva_carta[2]
+                                        print('CARTA ROBADA: ', nueva_carta, ' por BANCA.')
+                                        print('CARTAS DE ', turno[p][0], ' (banca) : ', Dict_Jugadores[turno[p][0]]['Cartas'])
+                                        print('PUNTOS BANCA: ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'])
+                                        mazo.remove(nueva_carta)
+                                    print('LA BANCA A ACUMULADO: ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'], ' puntos')
+                                    j_pasar += 1
+                                elif j_activos > ((j_eliminados + j_pasar) + 1):
+                                    print('--AUN QUEDAN JUGADORES ACTIVOS--')
 
-                                for j in range(len(mazo)):
-                                    if mazo[j][0] != 8 and mazo[j][0] != 9:
-                                        if mazo[j][2] < p_restantes:
-                                            c_posibles = c_posibles + 1
-                                prob = (c_posibles / (len(mazo) - 8)) * 100 #cartas restantes del mazo menos 8s y 9s
+                                else:
+                                    print('--TODOS LOS JUGADORES HAN SIDO ELIMINADOS--')
+                                    j_pasar += 1
 
-                                if prob >= 65:
+
+                            #SI ES HUMANO#
+
+                            elif Dict_Jugadores[turno[p][0]]['Tipo_jugador'] == 'Humano':
+                                print(turno[p][0], ' tiene ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'], 'puntos.')
+                                robar = str(input('Quieres otra carta?: SI = 1 / PLANTARSE = Cualquier otra tecla > '))
+                                if robar == '1':
                                     nueva_carta = random.choice(mazo)
                                     while nueva_carta[0] == 8 or nueva_carta[0] == 9:
                                         nueva_carta = random.choice(mazo)
                                     c_repartidas.append(nueva_carta)
                                     mazo.remove(nueva_carta)
-                                    print('CARTA ROBADA: ', nueva_carta, ' por ', turno[p][0])
                                     Dict_Jugadores[turno[p][0]]['Cartas'].append(nueva_carta)
+                                    print('CARTA ROBADA: ', nueva_carta, ' por ', turno[p][0])
+                                    print('CARTAS DE ', turno[p][0], ': ', Dict_Jugadores[turno[p][0]]['Cartas'])
                                     Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] = Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] + nueva_carta[2]
+                                    print('PUNTOS DE LAS CARTAS: ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'])
 
-                                elif prob >= 50 and prob < 65:
-                                    print('La probabilidad es de: ', prob)
-                                    prob_robar = random.randint(0, 100)
-                                    if prob_robar > prob:
+                                else: #JUGADOR PLANTADO, PARTICIPA EN LA RONDA
+                                    print('-------------', turno[p][0], ' se ha plantado -------------')
+                                    Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
+                                    j_pasar += 1
+                                print()
+
+                                if Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] == 7.5:
+                                    print('-------------', turno[p][0], ' ha conseguido 7,5 puntos -------------')
+                                    Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
+                                    j_pasar += 1
+
+                                if Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] > 7.5: #JUGADOR ELIMINADO DE LA RONDA
+                                    j_eliminados += 1
+                                    print('-------------!TE HAS PASADO¡ Fin de tu turno-------------')
+                                    Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
+
+                            #SI ES BOT#
+
+                            elif Dict_Jugadores[turno[p][0]]['Tipo_jugador'] == 'Bot':
+                                if Dict_Jugadores[turno[p][0]]['Puntos'] < Dict_Jugadores[turno[len(turno)-1][0]]['Puntos']:
+                                    nueva_carta = random.choice(mazo)
+                                    while nueva_carta[0] == 8 or nueva_carta[0] == 9:
+                                        nueva_carta = random.choice(mazo)
+                                    c_repartidas.append(nueva_carta)
+                                    mazo.remove(nueva_carta)
+                                    Dict_Jugadores[turno[p][0]]['Cartas'].append(nueva_carta)
+                                    print('CARTA ROBADA: ', nueva_carta, ' por ', turno[p][0])
+                                    print('CARTAS DE ', turno[p][0], ': ', Dict_Jugadores[turno[p][0]]['Cartas'])
+                                    Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] = Dict_Jugadores[turno[p][0]][
+                                                                                            'Suma_puntos_cartas'] + \
+                                                                                        nueva_carta[2]
+                                    print('PUNTOS DE LAS CARTAS: ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'])
+
+
+                                elif Dict_Jugadores[turno[p][0]]['Puntos'] > Dict_Jugadores[turno[len(turno)-1][0]]['Puntos']:
+                                    # CALCULAR PROBABILIDAD
+                                    p_restantes = 7.5 - Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas']
+                                    c_posibles = 0
+                                    for j in range(len(mazo)):
+                                        if mazo[j][0] != 8 and mazo[j][0] != 9:
+                                            if mazo[j][2] < p_restantes:
+                                                c_posibles = c_posibles + 1
+                                    prob = (c_posibles / (len(mazo) - 8)) * 100  # TODAS LAS CARTAS MENOS LAS DE VALOR 8 Y 9, EN TOTAL 8 MENOS
+
+                                    if prob > 65:
+                                        print('PROBABILIDAD 65-100 -->', prob)
                                         nueva_carta = random.choice(mazo)
                                         while nueva_carta[0] == 8 or nueva_carta[0] == 9:
                                             nueva_carta = random.choice(mazo)
                                         c_repartidas.append(nueva_carta)
                                         mazo.remove(nueva_carta)
-                                        print('CARTA ROBADA: ', nueva_carta, ' por ', turno[p][0])
                                         Dict_Jugadores[turno[p][0]]['Cartas'].append(nueva_carta)
-                                        Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] = Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] + nueva_carta[2]
-                                    else:
-                                        print(key, ' se ha plantado')
-                                        robar_b = False
+                                        print('CARTA ROBADA: ', nueva_carta, ' por ', turno[p][0])
+                                        print('CARTAS DE ', turno[p][0], ': ', Dict_Jugadores[turno[p][0]]['Cartas'])
+                                        Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] = Dict_Jugadores[turno[p][0]][
+                                                                                                'Suma_puntos_cartas'] + \
+                                                                                            nueva_carta[2]
+                                        print('PUNTOS DE LAS CARTAS: ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'])
 
-                                elif prob < 50:
-                                    prob = prob / 3
-                                    robar_b = False
-                                    print(turno[p][0], ' se ha plantado')
-                        print('Puntos finales de ', turno[p][0], ' en la ronda ', i + 1 , ': ', Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] )
-                        if Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] > 7.5:
-                            print(turno[p][0], ' se ha pasado de 7.5. Queda eliminado de la ronda')
-                            Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
-                        print()
-            input()
+
+
+                                    elif prob >= 50 and prob <= 65:
+                                        prob_robar = random.randint(0, 100)
+                                        print('PROBABILIDAD 50-65 -->', prob)
+                                        if prob_robar > 50 and prob_robar < 65:
+                                            nueva_carta = random.choice(mazo)
+                                            while nueva_carta[0] == 8 or nueva_carta[0] == 9:
+                                                nueva_carta = random.choice(mazo)
+                                            c_repartidas.append(nueva_carta)
+                                            mazo.remove(nueva_carta)
+                                            Dict_Jugadores[turno[p][0]]['Cartas'].append(nueva_carta)
+                                            print('CARTA ROBADA: ', nueva_carta, ' por ', turno[p][0])
+                                            print('CARTAS DE ', turno[p][0], ': ', Dict_Jugadores[turno[p][0]]['Cartas'])
+                                            Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] = Dict_Jugadores[turno[p][0]][
+                                                                                                    'Suma_puntos_cartas'] + \
+                                                                                                nueva_carta[2]
+                                            print('PUNTOS DE LAS CARTAS: ',
+                                                  Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'])
+                                        else:
+                                            print('-------------', turno[p][0], ' se ha plantado -------------')
+                                            Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
+                                            j_activos += 1
+                                        print()
+
+                                    elif prob < 50:
+                                        print('PROBABILIDAD 0-50 -->', prob)
+
+                                        prob_robar = random.randint(0, 100)
+                                        p_3 = int(50/3)
+                                        if prob_robar < p_3:
+                                            nueva_carta = random.choice(mazo)
+                                            while nueva_carta[0] == 8 or nueva_carta[0] == 9:
+                                                nueva_carta = random.choice(mazo)
+                                            c_repartidas.append(nueva_carta)
+                                            mazo.remove(nueva_carta)
+                                            Dict_Jugadores[turno[p][0]]['Cartas'].append(nueva_carta)
+                                            print('CARTA ROBADA: ', nueva_carta, ' por ', turno[p][0])
+                                            print('CARTAS DE ', turno[p][0], ': ',
+                                                  Dict_Jugadores[turno[p][0]]['Cartas'])
+                                            Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] = \
+                                                Dict_Jugadores[turno[p][0]][
+                                                    'Suma_puntos_cartas'] + \
+                                                nueva_carta[2]
+                                            print('PUNTOS DE LAS CARTAS: ',
+                                                  Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'])
+                                        else:
+                                            print('-------------', turno[p][0], ' se ha plantado -------------')
+                                            Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
+                                            j_activos += 1
+                                        print()
+
+                                if Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] == 7.5:
+                                    print('-------------', turno[p][0], ' ha conseguido 7,5 puntos -------------')
+                                    Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
+                                    j_pasar += 1
+
+                                if Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] > 7.5: #JUGADOR ELIMINADO DE LA RONDA
+                                    j_eliminados += 1
+                                    print('-------------!TE HAS PASADO¡ Fin de tu turno-------------')
+                                    Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
+
             print('--RESUMEN DE LA RONDA--')
             if Dict_Jugadores[turno[len(turno) - 1][0]]['Suma_puntos_cartas'] == 7.5: #si la banca tiene 7.5 gana a todos. se lleva todos los puntos
                 print('GANADOR: ', turno[len(turno) - 1][0], ' con 7.5 puntos')
@@ -367,7 +456,7 @@ while Juego:
                 for key in Dict_Jugadores:
                     if Dict_Jugadores[key]['Estado_Partida'] == True and Dict_Jugadores[key]['Estado_ronda'] == True:
                         if Dict_Jugadores[key]['Suma_puntos_cartas'] == max_suma_puntos:
-                            print('GANADOR: ', turno[key][0], ' con ', Dict_Jugadores[key]['Suma_puntos_cartas'], ' puntos')
+                            print('GANADOR: ', key, ' con ', Dict_Jugadores[key]['Suma_puntos_cartas'], ' puntos')
                             Dict_Jugadores[key]['Rondas_ganadas'] += 1
                             if Dict_Jugadores[key]['Suma_puntos_cartas'] == 7.5:
                                 print(key, ': Ahora eres la banca')
@@ -388,7 +477,7 @@ while Juego:
                         Dict_Jugadores[key]['Puntos'] = Dict_Jugadores[key]['Puntos'] + Dict_Jugadores[key]['Puntos_apostados']
                         print(key, ' ha conseguido ', Dict_Jugadores[key]['Suma_puntos_cartas'], ' puntos.')
                     elif Dict_Jugadores[key]['Banca'] == True:
-                        print('GANADOR: ', turno[key][0], ' con ', Dict_Jugadores[key]['Suma_puntos_cartas'], ' puntos')
+                        print('GANADOR: ', key, ' con ', Dict_Jugadores[key]['Suma_puntos_cartas'], ' puntos')
                         Dict_Jugadores[turno[len(turno) - 1][0]]['Rondas_ganadas'] += 1
                     else:
                         Dict_Jugadores[turno[len(turno) - 1][0]]['Puntos'] = Dict_Jugadores[turno[len(turno) - 1][0]]['Puntos'] + Dict_Jugadores[key]['Puntos_apostados']
@@ -444,7 +533,8 @@ while Juego:
         input('...3')
         input('...2')
         input('...1')
-        input(clas_jugadores[0][0], '¡FELICIDADES!')
+        print(clas_jugadores[0][0], '¡FELICIDADES!')
+        input()
 
         Volver_a_jugar = True
 
