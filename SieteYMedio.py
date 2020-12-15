@@ -114,9 +114,8 @@ while True:
             mazo.append(cartas_eliminadas[i])
         #==
         # == Quitar 8 y 9 ==
-        for cartas in mazo:
-            if cartas in cartas_prohibidas:
-                mazo.remove(cartas)
+        for cartas in cartas_prohibidas:
+            mazo.remove(cartas)
 
         
 
@@ -185,7 +184,7 @@ while True:
                                     print(key.upper(),
                                           "\n-Cartas ->", dict_players[key]["cartas"],
                                           "\n-Puntos cartas ->", dict_players[key]["suma_puntos_cartas"],
-                                          "\n-Puntos de", key, " ->", dict_players[key]["puntos"])
+                                          "\n-Puntos jugador", key, " ->", dict_players[key]["puntos"])
 
                                     while True:  # Comprobar si es posible apostar si tiene o no los suficientes puntos
                                         cantidad_apuesta = float(
@@ -201,12 +200,12 @@ while True:
             else:#== Siguientes turnos turno ==
                 for key in jugadores_turno:
 
-                    if dict_players[key]["estado_mano"] == "jugando":
+                    if dict_players[key]["estado_mano"] == "jugando" :
                         if dict_players[key]["puntos"] <= 0:
                             print("--El jugador", key,
                                   "se ha quedado sin puntos para apostar asique quedara plantado--")
                             dict_players[key]["estado_mano"] = "plantado"
-                            cont_jugadores = 0
+                            cont_jugadores -= 1
                             cont_plantados = cont_jugadores
                             break
 
@@ -256,7 +255,7 @@ while True:
         ganador = 0
         # Ver el numero de puntos mas alto
         for key in jugadores_turno:
-            if dict_players[key]["suma_puntos_cartas"] > ganador_puntos:
+            if dict_players[key]["suma_puntos_cartas"] > ganador_puntos and dict_players[key]["suma_puntos_cartas"] <= 7.5:
                 ganador_puntos = dict_players[key]["suma_puntos_cartas"]
                 ganador = key
                 ganadores.append(key)
@@ -314,13 +313,14 @@ while True:
             dict_players[key]["suma_puntos_cartas"] = 0
             dict_players[key]["puntos_apostados"] = 0
 
+
         #Ver si ha acabado partida
         if cont_jugadores == 0 or cont_jugadores == 1:
             print("==Partida finalizada==")
 
             #====Ver quien es el jugador segun las puntuaciones de cada uno===
             ganador_partida = []
-            ganador_partida_puntos =  0
+            ganador_partida_puntos = 0
             for i in range(len(turno)):
                 if ganador_partida_puntos >= dict_players[turno[i][0]]["puntos"]:
                     ganador_partida_puntos = dict_players[turno[i][0]]["puntos"]
@@ -366,8 +366,8 @@ while True:
 
 
         #===============================================================    
-        #- c
-        #-
+        #
+        #
         #
         #===============================================================
                 
