@@ -288,8 +288,7 @@ while True:
             ganador = 0
             # Ver el numero de puntos mas alto
             for key in jugadores_turno:
-                if dict_players[key]["suma_puntos_cartas"] > ganador_puntos and dict_players[key][
-                    "suma_puntos_cartas"] <= 7.5:
+                if dict_players[key]["suma_puntos_cartas"] > ganador_puntos and dict_players[key]["suma_puntos_cartas"] <= 7.5:
                     ganador_puntos = dict_players[key]["suma_puntos_cartas"]
                     ganador = key
                     ganadores.append(key)
@@ -353,7 +352,7 @@ while True:
                 ganador_partida = []
                 ganador_partida_puntos = 0
                 for i in range(len(turno)):
-                    if ganador_partida_puntos >= dict_players[turno[i][0]]["puntos"]:
+                    if ganador_partida_puntos <= dict_players[turno[i][0]]["puntos"]:
                         ganador_partida_puntos = dict_players[turno[i][0]]["puntos"]
                         ganador_partida.append(turno[i][0])
 
@@ -369,7 +368,7 @@ while True:
                             rondas = dict_players[turno[i][0]]["rondas_ganadas"]
 
                     print("==Ha habido un empate entre", ganador_partida, "===\n"
-                                                                          "### El ganador del desempate por rondas es",
+                            "### El ganador del desempate por rondas es",
                           jugador_ronda.upper(), "###\n")
                 # ====
                 print("+Quieres jugar otra partida??\n"
@@ -377,11 +376,15 @@ while True:
                       "Cualquier tecla)No")
                 option_final = input(">")
                 if option_final == "1":
-                    Jugadores = True
+                    mod1 = False
+                    inicio = False
+                    mod2 = False
                 else:
                     salir = True
+                    mod2 = False
                     break
                 Orden_Jugadores = True
+
     #======MODALIDAD BOTS==============
     while mod2:
         # == Annadir jugadores ==
