@@ -159,6 +159,13 @@ while True:
             # print(n_players)
 
         # == Bucle turnos ==
+        while True:
+            print("Cuanatas rondas quieres jugar(15 min y 30 max)?")
+            rondas = int(input(">"))
+            if rondas<15 or rondas>30:
+                print("\n== CANTIDAD INCORRECTA ==\n")
+            else:
+                break
         contador_rondas = 0
 
         while not Orden_Jugadores:
@@ -346,7 +353,7 @@ while True:
                 dict_players[key]["puntos_apostados"] = 0
 
             # Ver si ha acabado partida
-            if cont_jugadores == 0 or cont_jugadores == 1:
+            if cont_jugadores == 0 or cont_jugadores == 1 or contador_rondas == rondas:
                 print("==Partida finalizada==")
 
                 # ====Ver quien es el jugador segun las puntuaciones de cada uno===
