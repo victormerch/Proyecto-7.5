@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<mydata>
+  <row>
+       <Apuesta_media>6.312500</Apuesta_media>
+       <idpartida>1</idpartida>
+
+  </row>
+  <row>
+       <Apuesta_media>3.027027</Apuesta_media>
+       <idpartida>2</idpartida>
+
+  </row>
+  <row>
+       <Apuesta_media>1.250000</Apuesta_media>
+       <idpartida>3</idpartida>
+
+  </row>
+  <row>
+       <Apuesta_media>1.250000</Apuesta_media>
+       <idpartida>4</idpartida>
+
+  </row>
+  <row>
+       <Apuesta_media>1.250000</Apuesta_media>
+       <idpartida>5</idpartida>
+
+  </row>
+</mydata>

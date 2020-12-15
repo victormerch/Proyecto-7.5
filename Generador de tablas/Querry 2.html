@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <title></title>
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+ <body>
+     <table border="1">
+         <caption>select nombre,max(apuesta),idpartida from (select case when username is not null then usuario.username else descripcion end as nombre,max(turnos.apuesta) as apuesta,partida.idpartida as idpartida from jugador left join bot on bot.idbot=jugador.idbot left join usuario on usuario.idusuario=jugador.idusuario inner join participante on jugador.idjugador=participante.id_jugador inner join turnos on participante.id_participante=turnos.idparticipante inner join partida on turnos.idpartida=partida.idpartida where turnos.apuesta is not null group by partida.idpartida,username) tabla where (apuesta,idpartida) in (select max(turnos.apuesta),partida.idpartida  as apuesta from jugador left join bot on bot.idbot=jugador.idbot left join usuario on usuario.idusuario=jugador.idusuario inner join participante on jugador.idjugador=participante.id_jugador inner join turnos on participante.id_participante=turnos.idparticipante inner join partida on turnos.idpartida=partida.idpartida group by partida.idpartida order by max(turnos.apuesta) desc) group by idpartida;</caption>
+         <thead>
+           <tr>
+             <th>nombre</th>
+             <th>max(apuesta)</th>
+             <th>idpartida</th>
+           </tr>
+         </thead>
+         <tbody>
+             <tr>
+                 <td>Rafa</td>
+                 <td>2.00</td>
+                 <td>4</td>
+             </tr>
+             <tr>
+                 <td>Rafa</td>
+                 <td>2.00</td>
+                 <td>5</td>
+             </tr>
+             <tr>
+                 <td>Belen</td>
+                 <td>17.00</td>
+                 <td>1</td>
+             </tr>
+             <tr>
+                 <td>BotBeige</td>
+                 <td>10.00</td>
+                 <td>2</td>
+             </tr>
+             <tr>
+                 <td>BotBeige</td>
+                 <td>2.00</td>
+                 <td>3</td>
+             </tr>
+            </tbody>
+         </table>
+ </body>
+</html>
