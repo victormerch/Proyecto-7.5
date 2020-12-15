@@ -155,7 +155,7 @@ while True:
 
 
         cont = 0
-        while not cont_plantados == cont_jugadores :#Si hay alguno que este jugando se iniciara
+        while not cont_plantados == cont_jugadores and not cont_plantados == cont_jugadores-1:#Si hay alguno que este jugando se iniciara
 
             cont += 1
             if cont == 1:#== Primer turno ==
@@ -261,7 +261,7 @@ while True:
                 ganador = key
                 ganadores.append(key)
             else:
-                puntos_ganador = dict_players[key]["suma_puntos_cartas"]
+                puntos_ganador += dict_players[key]["puntos_apostados"]
             dict_players[key]["estado_mano"] = "jugando"
             nose_pasaron.append(key)
 
@@ -269,8 +269,8 @@ while True:
 
         # Comprobar empates
 
-        for key in nose_pasaron:
-            if dict_players[key]["suma_puntos_cartas"] == ganador_puntos and not ganador:
+        for key in jugadores_turno:
+            if dict_players[key]["suma_puntos_cartas"] == ganador_puntos and ganador != key:
                 ganadores.append(key)
 
         if len(ganadores) == 1:  # == Si solamente hay un ganador
@@ -366,8 +366,8 @@ while True:
 
 
         #===============================================================    
-        #-Dar sus puntos si gana
-        #-Si se pasa de 7.5 se planta directamente pero no se elimina de la partida
+        #- c
+        #-
         #
         #===============================================================
                 
