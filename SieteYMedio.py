@@ -1,5 +1,6 @@
 import random
-#== Flags ==
+
+# == Flags ==
 
 Jugadores = True
 Orden_Jugadores = False
@@ -9,7 +10,7 @@ inicio = False
 mod1 = False
 mod2 = True
 c_repartidas = []
-#== Bases de datos ==
+# == Bases de datos ==
 n_players = []
 dict_players = {}
 mazo = [(1, 1, 1), (1, 2, 1), (1, 3, 1), (1, 4, 1),
@@ -27,13 +28,12 @@ mazo = [(1, 1, 1), (1, 2, 1), (1, 3, 1), (1, 4, 1),
 
 jugadores = True
 
-
 Rondas = False
 Menu = True
 Ganador = True
 Volver_a_jugar = False
 Dict_Jugadores = {}
-Repartir = True
+
 
 while True:
 
@@ -73,8 +73,8 @@ while True:
     if salir:
         print("\n== HASTA LA PROXIMA ==\n")
         break
-    
-    #== Annadir jugadores ==
+
+    # == Annadir jugadores ==
     while mod1:
         while Jugadores:
 
@@ -182,7 +182,7 @@ while True:
             if contador_rondas > 1:
                 print("\n-PUNTOS DE CADA JUGADOR:")
                 for key in jugadores_turno:
-                    print(key.upper(),":",dict_players[key]["puntos"])
+                    print(key.upper(), ":", dict_players[key]["puntos"])
                 print()
             cont = 0
             while not cont_plantados == cont_jugadores and not cont_plantados == cont_jugadores - 1:  # Si hay alguno que este jugando se iniciara
@@ -212,7 +212,7 @@ while True:
                                     dict_players[key]["suma_puntos_cartas"] += carta[2]
 
                                     while True:
-                                        print("\nTurno de ",key.upper(),
+                                        print("\nTurno de ", key.upper(),
                                               "\n-Puntos de la carta ->", carta[2],
                                               "\n-Suma de puntos cartas ->", dict_players[key]["suma_puntos_cartas"],
                                               "\n-Puntos jugador", key, " ->", dict_players[key]["puntos"])
@@ -243,7 +243,7 @@ while True:
 
                             else:
                                 while True:
-                                    print("\nTurno de ",key.upper(),
+                                    print("\nTurno de ", key.upper(),
                                           "\n1) Pedir carta",
                                           "\n2) Plantarte")
                                     option_turno = input(">")
@@ -267,7 +267,7 @@ while True:
                                             cont_plantados += 1
                                         break
                                     elif option_turno == "2":
-                                        print("\n--El jugador",key.upper(),"se ha plantado--")
+                                        print("\n--El jugador", key.upper(), "se ha plantado--")
                                         input("Enter para continuar\n")
                                         dict_players[key]["estado_mano"] = "plantado"
                                         cont_plantados += 1
@@ -288,7 +288,8 @@ while True:
             ganador = 0
             # Ver el numero de puntos mas alto
             for key in jugadores_turno:
-                if dict_players[key]["suma_puntos_cartas"] > ganador_puntos and dict_players[key]["suma_puntos_cartas"] <= 7.5:
+                if dict_players[key]["suma_puntos_cartas"] > ganador_puntos and dict_players[key][
+                    "suma_puntos_cartas"] <= 7.5:
                     ganador_puntos = dict_players[key]["suma_puntos_cartas"]
                     ganador = key
                     ganadores.append(key)
@@ -368,7 +369,7 @@ while True:
                             rondas = dict_players[turno[i][0]]["rondas_ganadas"]
 
                     print("==Ha habido un empate entre", ganador_partida, "===\n"
-                            "### El ganador del desempate por rondas es",
+                                                                          "### El ganador del desempate por rondas es",
                           jugador_ronda.upper(), "###\n")
                 # ====
                 print("+Quieres jugar otra partida??\n"
@@ -385,7 +386,7 @@ while True:
                     break
                 Orden_Jugadores = True
 
-    #======MODALIDAD BOTS==============
+    # ======MODALIDAD BOTS==============
     while mod2:
         # == Annadir jugadores ==
         while jugadores:
@@ -494,6 +495,7 @@ while True:
         while Rondas:
             Rondas = False
             for i in range(n_rondas):
+                Repartir = True
                 mazo = [(1, 1, 1), (1, 2, 1), (1, 3, 1), (1, 4, 1),
                         (2, 1, 2), (2, 2, 2), (2, 3, 2), (2, 4, 2),
                         (3, 1, 3), (3, 2, 3), (3, 3, 3), (3, 4, 3),
@@ -658,6 +660,10 @@ while True:
                                         print('LA BANCA A ACUMULADO: ',
                                               Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'], ' puntos')
                                         j_pasar += 1
+                                        input()
+                                        if Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'] > 7.5:
+                                            Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
+
                                     elif j_activos > ((j_eliminados + j_pasar) + 1):
                                         print('--AUN QUEDAN JUGADORES ACTIVOS--')
 
@@ -835,8 +841,7 @@ while True:
 
                 elif Dict_Jugadores[turno[len(turno) - 1][0]]['Estado_ronda'] == False:  # si la banca se ha pasado
                     for key in Dict_Jugadores:
-                        if Dict_Jugadores[key]['Estado_Partida'] == True and Dict_Jugadores[key][
-                            'Estado_ronda'] == True:
+                        if Dict_Jugadores[key]['Estado_Partida'] == True:
                             if Dict_Jugadores[key]['Suma_puntos_cartas'] == max_suma_puntos:
                                 print('GANADOR: ', key, ' con ', Dict_Jugadores[key]['Suma_puntos_cartas'], ' puntos')
                                 Dict_Jugadores[key]['Rondas_ganadas'] += 1
@@ -905,13 +910,13 @@ while True:
                                 clas_jugadores[j + 1] = aux
 
                 for h in range(len(clas_jugadores)):
-                    print(clas_jugadores[h][0].ljust(20), str(clas_jugadores[h][1]).ljust(20),
-                          str(clas_jugadores[h][2]).ljust(20), str(clas_jugadores[h][3]).ljust(20))
+                    if clas_jugadores[h][3] == True:
+                        print(clas_jugadores[h][0].ljust(20), str(clas_jugadores[h][1]).ljust(20),
+                              str(clas_jugadores[h][2]).ljust(20), 'JUGANDO'.ljust(20))
+                    else:
+                        print(clas_jugadores[h][0].ljust(20), str(clas_jugadores[h][1]).ljust(20),
+                              str(clas_jugadores[h][2]).ljust(20), 'ELIMINADO'.ljust(20))
 
-            # En caso de empate quien gana, con 7,5 tambien.
-            # Si tenemos menos puntos que la banca, siempre elegiremos carta.
-            # Si el jugador es la banca:
-            # Pedirá carta mientras haya algún jugador que tenga más puntos que la banca.
         while Ganador:
             Ganador = False
             print('Y EL GANADOR ES...')
@@ -928,12 +933,9 @@ while True:
             Volver_a_jugar = False
             print('--FIN DE LA PARTIDA--')
             jugar = str(input('Quieres volver a jugar? SI = 1 / NO = Cualquier tecla'))
-            if jugar == '1':
-                Juego = True
-            else:
+            if jugar != '1':
                 print('--HASTA LA PROXIMA VEZ--')
-
-
-
-
-   
+                break
+            else:
+                break
+                inicio = False
