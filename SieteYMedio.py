@@ -853,9 +853,10 @@ while True:
                                 print('GANADOR: ', key, ' con ', Dict_Jugadores[key]['Suma_puntos_cartas'], ' puntos')
                                 Dict_Jugadores[key]['Rondas_ganadas'] += 1
                                 if Dict_Jugadores[key]['Suma_puntos_cartas'] == 7.5:
-                                    print(key, ': Ahora eres la banca')
                                     Dict_Jugadores[key]['Banca'] = True
-                                    Dict_Jugadores[turno[len(turno) - 1][0]]['Banca'] = False
+                                    for llave in Dict_Jugadores:
+                                        Dict_Jugadores[llave]['Banca'] = False
+                                    Dict_Jugadores[key]['Banca'] = True
                                     Dict_Jugadores[key]['Puntos'] = Dict_Jugadores[key]['Puntos'] + (
                                                 Dict_Jugadores[key]['Puntos_apostados'] * 2)
                                 else:
@@ -941,13 +942,10 @@ while True:
             print('--FIN DE LA PARTIDA--')
             jugar = str(input('Quieres volver a jugar? SI = 1 / NO = Cualquier tecla'))
             if jugar != '1':
-                print('--HASTA LA PROXIMA VEZ--')
                 salir = True
                 mod2 = False
                 break
             else:
-                break
-                salir = True
                 inicio = False
                 mod2 = False
                 break
