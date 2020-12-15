@@ -371,7 +371,7 @@ while True:
                     print("==Ha habido un empate entre", ganador_partida, "===\n"
                                                                           "### El ganador del desempate por rondas es",
                           jugador_ronda.upper(), "###\n")
-                # ====
+                #====FINAL PARTIDA ==
                 print("+Quieres jugar otra partida??\n"
                       "1)Si\n"
                       "Cualquier tecla)No")
@@ -935,7 +935,12 @@ while True:
             jugar = str(input('Quieres volver a jugar? SI = 1 / NO = Cualquier tecla'))
             if jugar != '1':
                 print('--HASTA LA PROXIMA VEZ--')
+                salir = True
+                mod2 = False
                 break
             else:
                 break
+                salir = True
                 inicio = False
+                mod2 = False
+                break
