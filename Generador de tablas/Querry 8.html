@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <title></title>
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+ <body>
+     <table border="1">
+         <caption>select idpartida as Partida,count(numero_turno) as Rondas_Ganadas from turnos t left join cartas c on t.carta_inicial = c.idcartas left join tipo_carta tc on c.tipo = tc.idtipo_carta where puntos_final > puntos_inicio and es_banca = 1 group by idpartida;</caption>
+         <thead>
+           <tr>
+             <th>Partida</th>
+             <th>Rondas_Ganadas</th>
+           </tr>
+         </thead>
+         <tbody>
+             <tr>
+                 <td>1</td>
+                 <td>5</td>
+             </tr>
+             <tr>
+                 <td>2</td>
+                 <td>13</td>
+             </tr>
+             <tr>
+                 <td>3</td>
+                 <td>16</td>
+             </tr>
+             <tr>
+                 <td>4</td>
+                 <td>16</td>
+             </tr>
+             <tr>
+                 <td>5</td>
+                 <td>16</td>
+             </tr>
+            </tbody>
+         </table>
+ </body>
+</html>
