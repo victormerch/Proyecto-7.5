@@ -385,7 +385,7 @@ while SieteYMedio:
                                               Dict_Jugadores[turno[p][0]]['Suma_puntos_cartas'])
 
                                     else:  # JUGADOR PLANTADO, PARTICIPA EN LA RONDA
-                                        print(str(turno[p][0], ' se ha plantado').center(60, '-'))
+                                        print('SE HA PLANTADO'.center(60, '-'))
                                         Dict_Jugadores[turno[p][0]]['Estado_ronda'] = False
                                         j_pasar += 1
                                     print()
