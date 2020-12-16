@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <title></title>
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+ <body>
+     <table border="1">
+         <caption>select turno5.p2-turno1.p1 diferencia from (select distinct puntos_inicio p1 from turnos t where numero_turno = 1 group by idpartida) turno1, ( select puntos_inicio p2 from turnos where numero_turno = 5) turno5;</caption>
+         <thead>
+           <tr>
+             <th>diferencia</th>
+           </tr>
+         </thead>
+         <tbody>
+             <tr>
+                 <td>-6.00</td>
+             </tr>
+             <tr>
+                 <td>47.00</td>
+             </tr>
+             <tr>
+                 <td>-10.00</td>
+             </tr>
+             <tr>
+                 <td>4.00</td>
+             </tr>
+             <tr>
+                 <td>-4.00</td>
+             </tr>
+             <tr>
+                 <td>0.00</td>
+             </tr>
+             <tr>
+                 <td>4.00</td>
+             </tr>
+             <tr>
+                 <td>-4.00</td>
+             </tr>
+             <tr>
+                 <td>4.00</td>
+             </tr>
+             <tr>
+                 <td>-4.00</td>
+             </tr>
+             <tr>
+                 <td>4.00</td>
+             </tr>
+             <tr>
+                 <td>-4.00</td>
+             </tr>
+            </tbody>
+         </table>
+ </body>
+</html>
