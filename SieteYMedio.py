@@ -1,19 +1,31 @@
 import random
 SieteYMedio = True
+import xml.etree.ElementTree as ET
 while SieteYMedio:
     # == Bases de datos ==
     n_players = []
     dict_players = {}
-    mazo = [(1, 1, 1), (1, 2, 1), (1, 3, 1), (1, 4, 1),
-            (2, 1, 2), (2, 2, 2), (2, 3, 2), (2, 4, 2),
-            (3, 1, 3), (3, 2, 3), (3, 3, 3), (3, 4, 3),
-            (4, 1, 4), (4, 2, 4), (4, 3, 4), (4, 4, 4),
-            (5, 1, 5), (5, 2, 5), (5, 3, 5), (5, 4, 5),
-            (6, 1, 6), (6, 2, 6), (6, 3, 6), (6, 4, 6),
-            (7, 1, 7), (7, 2, 7), (7, 3, 7), (7, 4, 7),
-            (10, 1, 0.5), (10, 2, 0.5), (10, 3, 0.5), (10, 4, 0.5),
-            (11, 1, 0.5), (11, 2, 0.5), (11, 3, 0.5), (11, 4, 0.5),
-            (12, 1, 0.5), (12, 2, 0.5), (12, 3, 0.5), (12, 4, 0.5)]
+    #mazo
+    tree = ET.parse("Basic_Config_Game.xml")
+    root = tree.getroot()
+    Min_Jugadores = int(root.find("Num_Min_Players").text)
+    Max_Jugadores = int(root.find("Num_Max_Players").text)
+    Max_Rondas = int(root.find("Num_Max_Rounds").text)
+    Puntos_Iniciales = int(root.find("Num_Initial_Points").text)
+
+    mazo = []
+    tree2 = ET.parse("xml_cartas.xml")
+    root2 = tree2.getroot()
+    for i in range(1, 13):
+        for carta in root2.iter("carta"):
+            valor = int(carta.find("valor").text)
+            palo = carta.find("palo").text
+            valor_juego = float(carta.find("valor_juego").text)
+            activa = carta.find("activa").text
+            if valor_juego != 0.5:
+                valor_juego = int(valor_juego)
+            if activa == "SI" and valor == i:
+                mazo.append((valor, palo, valor_juego))
     # --FLAGS--
     Menu = True
     Jugar = False
@@ -54,16 +66,19 @@ while SieteYMedio:
                   'Ganar la ronda con 7.5 : Puntos apostados x 2', '\n'
                   'Gana Banca : Suma de los puntos apostados por el resto de jugadores')
             input()
-            n_jug = int(input('Introduce el numero de jugadores HUMANO : '))  # NUMERO DE LOS JUGADORES
-            while n_jug < 0 or n_jug > 8:
-                print('ERROR! Cantidad de jugadores incorrecta')
-                n_jug = int(input('Introduce el numero de jugadores HUMANO : '))
-            players = []
-            if n_jug < 8:
-                bot = int(input('Introduce el numero de jugadores BOTS : '))
-                while (n_jug + bot) > 8 or (n_jug + bot) < 2:
-                    print('ERROR! Cantidad de  incorrecta')
+            jugadores_t = 0
+            while jugadores_t < Min_Jugadores:
+                n_jug = int(input('Introduce el numero de jugadores HUMANO : '))  # NUMERO DE LOS JUGADORES
+                while n_jug < 0 or n_jug > Max_Jugadores:
+                    print('ERROR! Cantidad de jugadores incorrecta')
+                    n_jug = int(input('Introduce el numero de jugadores HUMANO : '))
+                players = []
+                if n_jug < Max_Jugadores:
                     bot = int(input('Introduce el numero de jugadores BOTS : '))
+                    while (n_jug + bot) > Max_Jugadores or (n_jug + bot) < Min_Jugadores:
+                        print('ERROR! Cantidad de  incorrecta')
+                        bot = int(input('Introduce el numero de jugadores BOTS : '))
+                jugadores_t = n_jug + bot
             print()
 
             for i in range(n_jug):  # NOMBRE DE LOS JUGADORES #
@@ -83,7 +98,7 @@ while SieteYMedio:
                 Dict_Jugadores[players[h]] = {
                     'Tipo_jugador': 'Humano',
                     'Cartas': [],
-                    'Puntos': 3,
+                    'Puntos': Puntos_Iniciales,
                     'Suma_puntos_cartas': 0,
                     'Estado_ronda': True,
                     'Estado_Partida': True,
@@ -96,7 +111,7 @@ while SieteYMedio:
                 Dict_Jugadores[players[g + n_jug]] = {
                     'Tipo_jugador': 'Bot',
                     'Cartas': [],
-                    'Puntos': 5,
+                    'Puntos': Puntos_Iniciales,
                     'Suma_puntos_cartas': 0,
                     'Estado_ronda': True,
                     'Estado_Partida': True,
@@ -143,11 +158,13 @@ while SieteYMedio:
                     print(i, ')', turno[i][0].rjust(10), '-> VALOR de su CARTA:', turno[i][1][0], 'de BASTOS ')
             print()
             Dict_Jugadores[turno[0][0]]['Banca'] = True
-            n_rondas = int(input('CUANTAS RONDAS QUIERES JUGAR ( MIN. 15 - MAX. 30) > '))
+            print('CUANTAS RONDAS QUIERES JUGAR -- MAX. RONDAS :', Max_Rondas, ' > ')
+            n_rondas = int(input('> '))
             print()
-            #while n_rondas < 15 or n_rondas > 30:
-             #   print('--CANTIDAD INCORRECTA--')
-              #  n_rondas = input('cuantas rondas quieres jugar ( MIN. 15 - MAX. 30')
+            while n_rondas > Max_Rondas:
+                print('--CANTIDAD INCORRECTA--')
+                print('CUANTAS RONDAS QUIERES JUGAR -- MAX. RONDAS :', Max_Rondas, ' > ')
+                n_rondas = int(input('> '))
             Rondas = True
 
         # -EMPIEZA LA PARTIDA-#
