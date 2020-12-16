@@ -1,14 +1,36 @@
 # Proyecto 7.5
 
 
+##PROGRAMAS USADOS
+- GITHUB / GIT
+- PYCHARM / VISUAL / Otros
+- MySQL WORKBENCH
 
+##JUGABILIDAD
+Este juego clasico de cartas se debe jugar con una baraja española.
+Podriamos calificar a estes juego como un juego de apuestas.
 
+Para poder llevarlo a cabo, necesitaremos minimo dos jugadores. 
+Uno de ellos sera la banca. El resto compiten contra esta y entre ellos.
 
+Reglas del juego:
+
+  Cada jugador recibe una carta, esta carta define sus puntos inciales en cada ronda
+  Despues de esto y por orden, cada jugador decide si quiere plantarse o  recibir otra carta, contando que la suma de las cartas en su posesion no pueden superar 
+  la cantidad de SIETE Y MEDIO.
+  En caso de superar la cifra anteriormente especificada, este quedara automaticamente descalificado de la ronda.
+  
+  Un jugador unicamente es eliminado de la partida si su contador, al final de ronda y una vez repartidos los puntos segun el o los ganadores, es de 0 puntos.
+  
+  Hemos de especificar que, todo y que la baraja española cuenta con 48 cartas utiles, en este juego las cartas de valor 8 y 9 son nulas. NO se deben utilizar para jugar.
+  
 
 ### Pre-requisitos 📋
 
 Para poder jugar a este juego unicamente tendremos que tener instalado python en nuestro ordenador.
 
 Link de descarga de python -> https://www.python.org/downloads/
+
+
 
 
