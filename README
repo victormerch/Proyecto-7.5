@@ -1,11 +1,6 @@
 # Proyecto 7.5
 
 
-##PROGRAMAS USADOS
-- GITHUB / GIT
-- PYCHARM / VISUAL / Otros
-- MySQL WORKBENCH
-
 ##JUGABILIDAD
 Este juego clasico de cartas se debe jugar con una baraja española.
 Podriamos calificar a estes juego como un juego de apuestas.
@@ -24,6 +19,11 @@ Reglas del juego:
   
   Hemos de especificar que, todo y que la baraja española cuenta con 48 cartas utiles, en este juego las cartas de valor 8 y 9 son nulas. NO se deben utilizar para jugar.
   
+
+##PROGRAMAS USADOS
+- GITHUB / GIT
+- PYCHARM / VISUAL / Otros
+- MySQL WORKBENCH
 
 ### Pre-requisitos 📋
 
