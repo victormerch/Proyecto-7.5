@@ -10,7 +10,9 @@ Uno de ellos sera la banca. El resto compiten contra esta y entre ellos.
 
 Reglas del juego:
 
-  Cada jugador recibe una carta, esta carta define sus puntos inciales en cada ronda
+  Cada jugador recibe una carta, esta carta define sus puntos inciales en cada ronda.
+  En funcion del valor de esta carta y de las probabilidades que el jugador cree que tiene par alcanzar 7.5, se apuesta una cantidad (en unos rangos predefinidos)
+  del total de tus puntos
   Despues de esto y por orden, cada jugador decide si quiere plantarse o  recibir otra carta, contando que la suma de las cartas en su posesion no pueden superar 
   la cantidad de SIETE Y MEDIO.
   En caso de superar la cifra anteriormente especificada, este quedara automaticamente descalificado de la ronda.
